@@ -213,22 +213,6 @@ streamlit run app.py
 
 ---
 
-## 💡 Interview & Resume Highlights
-
-This project was designed to demonstrate production-level data science skills:
-
-| Skill | Implementation |
-|---|---|
-| **Target Leakage Awareness** | Explicitly removed `time` column from training |
-| **Data Augmentation** | SDV synthetic data generation (TSTR framework) |
-| **Model Selection** | 4-model comparison with cross-validation |
-| **LLM Integration** | Structured JSON output from Google Gemini |
-| **Pickle-safe Serialization** | `model_utils.py` pattern for cloud deployment |
-| **Interactive ML** | Real-time What-If Analysis with 5 adjustable features |
-| **Full Deployment** | Live on Streamlit Cloud with secure secrets management |
-
----
-
 ## ⚠️ Disclaimer
 
 > This application is built for **educational and portfolio purposes only**. It is not a certified medical device and does not constitute medical advice. Always consult a qualified healthcare professional for clinical decisions.
@@ -242,3 +226,16 @@ Made with ❤️ by **[Kashvi Soni](https://github.com/Kashvi1811)**
 ⭐ If you found this project useful, please star the repository!
 
 </div>
+
+## 📜 License
+
+This project is intended for educational and personal use. All rights reserved by **Kashvi1811**.  
+*For any usage beyond personal or educational purposes, please contact me in advance.*
+
+## 🤝 Contact & Colloboration
+
+I’m always open to feedback, ideas, and collaboration opportunities! Feel free to reach out:
+
+- **GitHub:** [@Kashvi1811](https://github.com/Kashvi1811)
+- **LinkedIn:** https://www.linkedin.com/in/kashvi-soni-6330a92b2/
+- **Email:** kashvisoni2005@gmail.com
