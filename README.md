@@ -8,7 +8,6 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![XGBoost](https://img.shields.io/badge/XGBoost-Model-189AB4?style=for-the-badge&logo=python&logoColor=white)](https://xgboost.readthedocs.io)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
 
 <br/>
 
