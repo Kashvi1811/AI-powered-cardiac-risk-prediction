@@ -213,7 +213,20 @@ streamlit run app.py
 
 ---
 
-## ⚠️ Disclaimer
+## 📜 License
+
+This project is intended for educational and personal use. All rights reserved by **Kashvi1811**.  
+*For any usage beyond personal or educational purposes, please contact me in advance.*
+
+## 🤝 Contact & Colloboration
+
+I’m always open to feedback, ideas, and collaboration opportunities! Feel free to reach out:
+
+- **GitHub:** [@Kashvi1811](https://github.com/Kashvi1811)
+- **LinkedIn:** https://www.linkedin.com/in/kashvi-soni-6330a92b2/
+- **Email:** kashvisoni2005@gmail.com
+
+  ## ⚠️ Disclaimer
 
 > This application is built for **educational and portfolio purposes only**. It is not a certified medical device and does not constitute medical advice. Always consult a qualified healthcare professional for clinical decisions.
 
@@ -227,15 +240,3 @@ Made with ❤️ by **[Kashvi Soni](https://github.com/Kashvi1811)**
 
 </div>
 
-## 📜 License
-
-This project is intended for educational and personal use. All rights reserved by **Kashvi1811**.  
-*For any usage beyond personal or educational purposes, please contact me in advance.*
-
-## 🤝 Contact & Colloboration
-
-I’m always open to feedback, ideas, and collaboration opportunities! Feel free to reach out:
-
-- **GitHub:** [@Kashvi1811](https://github.com/Kashvi1811)
-- **LinkedIn:** https://www.linkedin.com/in/kashvi-soni-6330a92b2/
-- **Email:** kashvisoni2005@gmail.com
