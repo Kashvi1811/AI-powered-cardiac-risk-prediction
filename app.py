@@ -5,6 +5,7 @@ import joblib # type: ignore
 import json
 import plotly.graph_objects as go # type: ignore
 from pathlib import Path
+from model_utils import log_transform_func  # required for pickle to resolve the pipeline's transform step
 
 # ---------------------------
 # Setup and model

@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.svm import SVC
 import joblib
+from model_utils import log_transform_func  # shared reference for stable pickling
 
 # SDV imports for synthetic data
 from sdv.metadata import SingleTableMetadata
@@ -75,9 +76,6 @@ y_train_synth = synthetic_data["DEATH_EVENT"].astype(int)
 standard_scaler = ["age", "ejection_fraction", "serum_sodium"]
 robust_scaler = ["platelets"]
 log_robust = ["serum_creatinine", "creatinine_phosphokinase"]
-
-def log_transform_func(x):
-    return np.log1p(x)
 
 log_transform = FunctionTransformer(log_transform_func)
 
