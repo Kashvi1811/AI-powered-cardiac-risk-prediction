@@ -56,34 +56,34 @@ The project goes beyond a typical ML notebook by incorporating:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    AI Cardiac Risk System                    │
+│                    AI Cardiac Risk System                   │
 │                                                             │
-│  ┌─────────────┐    ┌──────────────────┐   ┌────────────┐  │
+│  ┌─────────────┐    ┌──────────────────┐    ┌────────────┐  │
 │  │  train.py   │───▶│  SDV Synthesizer │──▶│  5,000     │  │
-│  │             │    │  (GaussianCopula)│   │  Synthetic │  │
-│  └─────────────┘    └──────────────────┘   │  Records   │  │
-│         │                                  └─────┬──────┘  │
+│  │             │    │  (GaussianCopula)│    │  Synthetic │  │
+│  └─────────────┘    └──────────────────┘    │  Records   │  │
+│         │                                   └─────┬──────┘  │
 │         ▼                                        ▼          │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │          Model Comparison (4 Models)                │   │
-│  │   Logistic Regression │ SVM │ Random Forest │ XGB   │   │
-│  └─────────────────────────────┬───────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │          Model Comparison (4 Models)                │    │
+│  │   Logistic Regression │ SVM │ Random Forest │ XGB   │    │
+│  └─────────────────────────────┬───────────────────────┘    │
 │                                ▼                            │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │        XGBoost Pipeline (Best on Real Holdout)      │   │
-│  │         ColumnTransformer → XGBClassifier           │   │
-│  │                 ROC-AUC: 0.789                      │   │
-│  └─────────────────────────┬───────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │        XGBoost Pipeline (Best on Real Holdout)      │    │
+│  │         ColumnTransformer → XGBClassifier           │    │
+│  │                 ROC-AUC: 0.789                      │    │
+│  └─────────────────────────┬───────────────────────────┘    │
 │                             │                               │
 │                    xgboost_pipeline.pkl                     │
 │                             │                               │
 │                             ▼                               │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │                     app.py (Streamlit)              │   │
-│  │  Tab 1: Patient Intake                              │   │
-│  │  Tab 2: Clinical Dashboard  ←── Google Gemini LLM  │   │
-│  │  Tab 3: Deep Analysis (What-If + Plotly Charts)     │   │
-│  └─────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                     app.py (Streamlit)              │    │
+│  │  Tab 1: Patient Intake                              │    │
+│  │  Tab 2: Clinical Dashboard  ←── Google Gemini LLM   │    │
+│  │  Tab 3: Deep Analysis (What-If + Plotly Charts)     │    │
+│  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -226,7 +226,7 @@ I’m always open to feedback, ideas, and collaboration opportunities! Feel free
 - **LinkedIn:** https://www.linkedin.com/in/kashvi-soni-6330a92b2/
 - **Email:** kashvisoni2005@gmail.com
 
-  ## ⚠️ Disclaimer
+## ⚠️ Disclaimer
 
 > This application is built for **educational and portfolio purposes only**. It is not a certified medical device and does not constitute medical advice. Always consult a qualified healthcare professional for clinical decisions.
 
