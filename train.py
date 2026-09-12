@@ -15,7 +15,7 @@ from model_utils import log_transform_func  # shared reference for stable pickli
 # SDV imports for synthetic data
 from sdv.metadata import SingleTableMetadata
 from sdv.single_table import GaussianCopulaSynthesizer
-from sdv.evaluation.single_table import evaluate_quality
+from sdmetrics.reports.single_table import QualityReport
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -64,7 +64,9 @@ print("Generating 5,000 synthetic patient records...")
 synthetic_data = synthesizer.sample(num_rows=5000)
 
 print("Evaluating synthetic data quality...")
-print("Quality report evaluation skipped to avoid API version mismatch.")
+report = QualityReport()
+report.generate(df_train_real, synthetic_data, metadata.to_dict())
+print(f"Overall Quality Score: {report.get_score()*100:.2f}%")
 
 # Separate features and target from synthetic data
 X_train_synth = synthetic_data.drop(columns=["DEATH_EVENT"])
