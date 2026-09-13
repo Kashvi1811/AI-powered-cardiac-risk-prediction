@@ -146,6 +146,15 @@ final_pipeline = Pipeline([
 
 final_pipeline.fit(X_train_comb, y_train_comb)
 
+print("\n--- EVALUATION OF FINAL DEPLOYED MODEL (seed=42) ---")
+y_pred_real = final_pipeline.predict(X_test_real)
+y_pred_prob_real = final_pipeline.predict_proba(X_test_real)[:, 1]
+
+roc_auc = roc_auc_score(y_test_real, y_pred_prob_real)
+print(f"Final Model ROC-AUC on Real Holdout Set: {roc_auc:.3f}")
+print("\nClassification Report on Real Data:")
+print(classification_report(y_test_real, y_pred_real))
+
 print("\nSaving model to logisticregression_pipeline.pkl...")
 joblib.dump(final_pipeline, "logisticregression_pipeline.pkl")
 print("Done!")
