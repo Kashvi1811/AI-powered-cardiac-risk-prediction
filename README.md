@@ -64,21 +64,21 @@ The project goes beyond a typical ML notebook by incorporating:
 │  │             │    │  (GaussianCopula)│    │  Synthetic │  │
 │  └─────────────┘    └──────────────────┘    │  Records   │  │
 │         │                                   └─────┬──────┘  │
-│         ▼ (10-seed Monte Carlo CV)                ▼          │
+│         ▼ (10-seed Monte Carlo CV)                ▼         │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │     robustness_test.py — 4 Models × 2 Strategies   │    │
+│  │     robustness_test.py — 4 Models × 2 Strategies    │    │
 │  │   Logistic Regression │ SVM │ Random Forest │ XGB   │    │
 │  └─────────────────────────┬───────────────────────────┘    │
-│                            ▼ WINNER: Logistic Regression     │
+│                            ▼ WINNER: Logistic Regression    │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │    Logistic Regression (Real + Synthetic Combined)  │    │
 │  │    ColumnTransformer → LogisticRegression           │    │
-│  │    Mean ROC-AUC: 0.769 | Recall@0.4: 0.84          │    │
+│  │    Mean ROC-AUC: 0.769 | Recall@0.4: 0.84           │    │
 │  └─────────────────────────┬───────────────────────────┘    │
-│                             │                               │
+│                            │                                │
 │              logisticregression_pipeline.pkl                │
-│                             │                               │
-│                             ▼                               │
+│                            │                                │
+│                            ▼                                │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │                     app.py (Streamlit)              │    │
 │  │  Tab 1: Patient Intake                              │    │
