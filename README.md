@@ -43,7 +43,7 @@ The project goes beyond a typical ML notebook by incorporating:
 |---|---|
 | 🎯 **Risk Prediction** | Logistic Regression pipeline predicts heart failure risk with **mean ROC-AUC: 0.769** across 10 random seeds |
 | 🧬 **Synthetic Data Augmentation** | SDV GaussianCopula generates 5,000 synthetic patient records combined with real data for training |
-| 🛡️ **Medically-Tuned Threshold** | Decision threshold lowered to **0.40** (from default 0.50) to achieve **recall of 0.84** — catching 84% of at-risk patients |
+| 🛡️ **Medically-Tuned Threshold** | Decision threshold tuned via **cross-validation (F2-score) to 0.35**, achieving **recall of 0.95** — catching 95% of at-risk patients |
 | 🔬 **Robustness-Tested** | Model validated across **10 random seeds** (Monte Carlo CV) with 95% CI reported — not a single lucky split |
 | 🤖 **AI Clinical Translation** | Google Gemini explains results in plain English, structured as JSON for a true dashboard experience |
 | 📊 **Interactive Risk Gauge** | Plotly speedometer gauge maps risk onto a live Green → Amber → Red spectrum |
@@ -127,17 +127,19 @@ All models were evaluated across **10 random train/test splits** to eliminate si
 
 > ⚠️ **XGBoost's 0.789 score at seed=42 was split-specific variance**, not genuine superiority. Logistic Regression won consistently across all 10 seeds.
 
-### 4. Medical Decision Threshold Tuning
+### 4. Leakage-Free Medical Decision Threshold Tuning
 
-The default threshold of 0.50 produced a recall of only **0.47** — missing 53% of at-risk patients. This is unacceptable in a medical context. The app uses **threshold = 0.40**:
+The default threshold of 0.50 produced a recall of only **0.47** — missing 53% of at-risk patients. This is unacceptable in a medical context. 
+
+To prevent data leakage, the optimal threshold was found purely on the training set using **Out-Of-Fold (OOF) cross-validation** to maximize the F2-score (weighting recall over precision). The data-driven optimal threshold is **0.35**:
 
 | Threshold | Recall (At-Risk) | Precision (At-Risk) |
 |---|---|---|
 | 0.50 (default) | 0.47 | 0.75 |
-| **0.40 (deployed)** | **0.84** | **0.48** |
-| 0.30 | 1.00 | 0.40 |
+| 0.40 | 0.84 | 0.48 |
+| **0.35 (deployed via F2 OOF)** | **0.95** | **0.43** |
 
-> In cardiac screening, a false negative (missed fatal case) is catastrophically worse than a false positive (extra follow-up). Tuning to 0.40 is the clinically correct choice.
+> In cardiac screening, a false negative (missed fatal case) is catastrophically worse than a false positive (extra follow-up). Tuning the threshold to 0.35 maximizes sensitivity while being mathematically rigorous and leak-free.
 
 ### 5. Preprocessing Pipeline
 
@@ -219,7 +221,7 @@ streamlit run app.py
 ## 📁 Project Structure
 
 ```
-├── app.py                          # Main Streamlit application (3-tab UI, threshold=0.40)
+├── app.py                          # Main Streamlit application (3-tab UI, dynamic threshold)
 ├── train.py                        # ML training pipeline (10-seed robustness + final model export)
 ├── robustness_test.py              # Monte Carlo CV: 4 models × 2 strategies × 10 seeds
 ├── evaluate_threshold.py           # Decision threshold analysis (0.2 → 0.5 comparison)
