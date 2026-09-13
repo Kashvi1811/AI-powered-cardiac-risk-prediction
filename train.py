@@ -121,7 +121,7 @@ best_model_name = max(results, key=results.get)
 print(f"Best model based on Synthetic CV: {best_model_name}")
 
 # We will use XGBoost as the final model for the pipeline (with some basic tuned params)
-print("\nTraining Final XGBoost Pipeline on all Synthetic Data...")
+print("\nTraining Final XGBoost Pipeline on Combined (Real + Synthetic) Data...")
 final_pipeline = Pipeline([
     ("Preprocessor", preprocessor),
     ("Model", XGBClassifier(
@@ -136,7 +136,9 @@ final_pipeline = Pipeline([
     ))
 ])
 
-final_pipeline.fit(X_train_synth, y_train_synth)
+X_train_combined = pd.concat([X_train_real, X_train_synth], ignore_index=True)
+y_train_combined = pd.concat([y_train_real, y_train_synth], ignore_index=True)
+final_pipeline.fit(X_train_combined, y_train_combined)
 
 # ---------------------------------------------------------
 # 5. EVALUATION ON HOLD-OUT REAL DATA (TSTR)
