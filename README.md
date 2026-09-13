@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
-[![XGBoost](https://img.shields.io/badge/XGBoost-Model-189AB4?style=for-the-badge&logo=python&logoColor=white)](https://xgboost.readthedocs.io)
+[![LogisticRegression](https://img.shields.io/badge/Logistic_Regression-Model-189AB4?style=for-the-badge&logo=python&logoColor=white)](https://scikit-learn.org)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
 
 <br/>
@@ -41,12 +41,14 @@ The project goes beyond a typical ML notebook by incorporating:
 
 | Feature | Description |
 |---|---|
-| 🎯 **Risk Prediction** | XGBoost pipeline predicts heart failure risk with **ROC-AUC: 0.789** on real unseen data |
-| 🤖 **AI Clinical Translation** | Google Gemini explains results in plain English, structured as JSON for a true dashboard |
+| 🎯 **Risk Prediction** | Logistic Regression pipeline predicts heart failure risk with **mean ROC-AUC: 0.769** across 10 random seeds |
+| 🧬 **Synthetic Data Augmentation** | SDV GaussianCopula generates 5,000 synthetic patient records combined with real data for training |
+| 🛡️ **Medically-Tuned Threshold** | Decision threshold lowered to **0.40** (from default 0.50) to achieve **recall of 0.84** — catching 84% of at-risk patients |
+| 🔬 **Robustness-Tested** | Model validated across **10 random seeds** (Monte Carlo CV) with 95% CI reported — not a single lucky split |
+| 🤖 **AI Clinical Translation** | Google Gemini explains results in plain English, structured as JSON for a true dashboard experience |
 | 📊 **Interactive Risk Gauge** | Plotly speedometer gauge maps risk onto a live Green → Amber → Red spectrum |
-| 🎛️ **What-If Analysis** | Adjust 5 clinical parameters (EF, Creatinine, Sodium, BP, Smoking) and watch risk update instantly |
-| 🧬 **Synthetic Data Training** | SDV GaussianCopula generates 5,000 realistic synthetic patient records, addressing dataset size limitations |
-| 🛡️ **Secure API Key Management** | Gemini API key is stored server-side via Streamlit Secrets — never exposed to users |
+| 🎛️ **What-If Analysis** | Adjust 5 clinical parameters and watch risk update in real time |
+| 🛡️ **Secure API Key Management** | Gemini API key stored server-side via Streamlit Secrets — never exposed to users |
 | 📋 **Tabbed UI** | Clean 3-tab interface: Patient Intake → Clinical Dashboard → Deep Analysis |
 
 ---
@@ -62,19 +64,19 @@ The project goes beyond a typical ML notebook by incorporating:
 │  │             │    │  (GaussianCopula)│    │  Synthetic │  │
 │  └─────────────┘    └──────────────────┘    │  Records   │  │
 │         │                                   └─────┬──────┘  │
-│         ▼                                        ▼          │
+│         ▼ (10-seed Monte Carlo CV)                ▼          │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │          Model Comparison (4 Models)                │    │
+│  │     robustness_test.py — 4 Models × 2 Strategies   │    │
 │  │   Logistic Regression │ SVM │ Random Forest │ XGB   │    │
-│  └─────────────────────────────┬───────────────────────┘    │
-│                                ▼                            │
+│  └─────────────────────────┬───────────────────────────┘    │
+│                            ▼ WINNER: Logistic Regression     │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │        XGBoost Pipeline (Best on Real Holdout)      │    │
-│  │         ColumnTransformer → XGBClassifier           │    │
-│  │                 ROC-AUC: 0.789                      │    │
+│  │    Logistic Regression (Real + Synthetic Combined)  │    │
+│  │    ColumnTransformer → LogisticRegression           │    │
+│  │    Mean ROC-AUC: 0.769 | Recall@0.4: 0.84          │    │
 │  └─────────────────────────┬───────────────────────────┘    │
 │                             │                               │
-│                    logisticregression_pipeline.pkl          │
+│              logisticregression_pipeline.pkl                │
 │                             │                               │
 │                             ▼                               │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -96,29 +98,48 @@ The project goes beyond a typical ML notebook by incorporating:
 - **Target:** `DEATH_EVENT` (0 = survived, 1 = death due to heart failure)
 - **Target Leakage Removed:** The `time` (follow-up period) column was explicitly dropped to prevent data leakage.
 
-### 2. Synthetic Data Augmentation (TSTR Framework)
+### 2. Synthetic Data Augmentation (Combined Strategy)
 
-To overcome the 299-record limitation without introducing real patient data, we use **Train on Synthetic, Test on Real (TSTR)**:
+Synthetic data is generated using the **SDV GaussianCopula** model and **combined with real training data** for the final model — proven to outperform pure-synthetic-only training across 10 random seeds:
 
 ```python
 # SDV GaussianCopula learns the joint distribution of real training data
 synthesizer = GaussianCopulaSynthesizer(metadata)
 synthesizer.fit(df_train_real)
 synthetic_data = synthesizer.sample(num_rows=5000)  # 5,000 realistic records
+
+# Combine with real training data
+X_train_combined = pd.concat([X_train_real, X_train_synth])
 ```
 
-### 3. Model Comparison
+Synthetic data quality was validated with **sdmetrics QualityReport**: `84.05%` overall score (Column Shapes: 93.27%, Column Pair Trends: 74.83%).
 
-| Model | Synthetic CV ROC-AUC |
-|---|---|
-| **Logistic Regression** | 0.681 |
-| SVM | 0.659 |
-| Random Forest | 0.637 |
-| XGBoost | 0.615 |
+### 3. Multi-Seed Robustness Testing (Monte Carlo CV)
 
-> ✅ **Final Model:** XGBoost with tuned hyperparameters, achieving **ROC-AUC: 0.789** on unseen real patient data.
+All models were evaluated across **10 random train/test splits** to eliminate single-seed bias:
 
-### 4. Preprocessing Pipeline
+| Model | Combined Mean ROC-AUC | Std Dev |
+|---|---|---|
+| ✅ **Logistic Regression** | **0.769** | ±0.061 |
+| SVM | 0.736 | ±0.059 |
+| Random Forest | 0.734 | ±0.045 |
+| XGBoost | 0.683 | ±0.063 |
+
+> ⚠️ **XGBoost's 0.789 score at seed=42 was split-specific variance**, not genuine superiority. Logistic Regression won consistently across all 10 seeds.
+
+### 4. Medical Decision Threshold Tuning
+
+The default threshold of 0.50 produced a recall of only **0.47** — missing 53% of at-risk patients. This is unacceptable in a medical context. The app uses **threshold = 0.40**:
+
+| Threshold | Recall (At-Risk) | Precision (At-Risk) |
+|---|---|---|
+| 0.50 (default) | 0.47 | 0.75 |
+| **0.40 (deployed)** | **0.84** | **0.48** |
+| 0.30 | 1.00 | 0.40 |
+
+> In cardiac screening, a false negative (missed fatal case) is catastrophically worse than a false positive (extra follow-up). Tuning to 0.40 is the clinically correct choice.
+
+### 5. Preprocessing Pipeline
 
 ```python
 ColumnTransformer([
@@ -154,15 +175,15 @@ Each field is rendered into a dedicated, styled UI component — green cards for
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Streamlit, Plotly |
-| **ML Model** | XGBoost, Scikit-learn |
-| **AI / LLM** | Google Gemini 3.6 Flash (`google-genai`) |
-| **Synthetic Data** | SDV (Synthetic Data Vault) — GaussianCopula |
-| **Backend** | Python 3.14 |
-| **Deployment** | Streamlit Community Cloud |
-| **Version Control** | GitHub |
+| Layer | Technology | Version |
+|---|---|---|
+| **Frontend** | Streamlit, Plotly | 1.59.2, 7.0.0 |
+| **ML Model** | Logistic Regression, Scikit-learn | 1.8.0 |
+| **AI / LLM** | Google Gemini 3.6 Flash (`google-genai`) | 2.23.0 |
+| **Synthetic Data** | SDV (GaussianCopula) + sdmetrics | 1.38.3, 0.31.0 |
+| **Backend** | Python 3.14, pandas, numpy | 2.3.3, 2.4.4 |
+| **Deployment** | Streamlit Community Cloud | — |
+| **Version Control** | GitHub | — |
 
 ---
 
@@ -198,15 +219,18 @@ streamlit run app.py
 ## 📁 Project Structure
 
 ```
-├── app.py                  # Main Streamlit application (3-tab UI)
-├── train.py                # ML training pipeline (synthetic data + model comparison)
-├── model_utils.py          # Shared utility functions (required for pickle serialization)
-├── requirements.txt        # Python dependencies
+├── app.py                          # Main Streamlit application (3-tab UI, threshold=0.40)
+├── train.py                        # ML training pipeline (10-seed robustness + final model export)
+├── robustness_test.py              # Monte Carlo CV: 4 models × 2 strategies × 10 seeds
+├── evaluate_threshold.py           # Decision threshold analysis (0.2 → 0.5 comparison)
+├── model_utils.py                  # Shared utility functions (required for pickle serialization)
+├── heartfail_code.py               # Original EDA and notebook-style model exploration
+├── requirements.txt                # Pinned Python dependencies
 ├── logisticregression_pipeline.pkl # Trained Logistic Regression pipeline (serialized)
 ├── heart_failure_clinical_records_dataset.csv
 ├── .streamlit/
-│   ├── config.toml         # Theme configuration (Medical Light Blue theme)
-│   └── secrets.toml        # 🔒 NOT committed — add your Gemini API key here
+│   ├── config.toml                 # Theme configuration (Medical Light Blue theme)
+│   └── secrets.toml                # 🔒 NOT committed — add your Gemini API key here
 └── README.md
 ```
 

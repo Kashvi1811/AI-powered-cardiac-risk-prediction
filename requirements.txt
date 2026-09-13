@@ -1,12 +1,22 @@
-streamlit
-pandas
-numpy
-scikit-learn
-xgboost
-joblib
+# Core App
+streamlit==1.59.2
+pandas==2.3.3
+numpy==2.4.4
+joblib==1.5.3
+plotly==7.0.0
+
+# ML
+scikit-learn==1.8.0
+xgboost==3.4.1
+
+# Synthetic Data Generation & Evaluation
+sdv==1.38.3
+sdmetrics==0.31.0
+
+# Google Gemini AI
+google-genai==2.23.0
+
+# Visualization (used in heartfail_code.py / notebook)
 matplotlib
 seaborn
-sdv
 shap
-google-genai
-plotly
