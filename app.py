@@ -13,10 +13,10 @@ from model_utils import log_transform_func  # required for pickle to resolve the
 st.set_page_config(page_title="Cardiac Health AI", page_icon="🫀", layout="wide")
 
 @st.cache_resource
-def load_new_model():
-    return joblib.load("xgboost_pipeline.pkl")
+def load_model():
+    return joblib.load("logisticregression_pipeline.pkl")
 
-model = load_new_model()
+model = load_model()
 gemini_api_key = st.secrets.get("GEMINI_API_KEY", "")
 
 st.markdown("""

@@ -74,7 +74,7 @@ The project goes beyond a typical ML notebook by incorporating:
 │  │                 ROC-AUC: 0.789                      │    │
 │  └─────────────────────────┬───────────────────────────┘    │
 │                             │                               │
-│                    xgboost_pipeline.pkl                     │
+│                    logisticregression_pipeline.pkl          │
 │                             │                               │
 │                             ▼                               │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -202,7 +202,7 @@ streamlit run app.py
 ├── train.py                # ML training pipeline (synthetic data + model comparison)
 ├── model_utils.py          # Shared utility functions (required for pickle serialization)
 ├── requirements.txt        # Python dependencies
-├── xgboost_pipeline.pkl    # Trained XGBoost pipeline (serialized)
+├── logisticregression_pipeline.pkl # Trained Logistic Regression pipeline (serialized)
 ├── heart_failure_clinical_records_dataset.csv
 ├── .streamlit/
 │   ├── config.toml         # Theme configuration (Medical Light Blue theme)
