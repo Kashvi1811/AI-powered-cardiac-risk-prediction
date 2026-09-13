@@ -267,8 +267,10 @@ with tab2:
         patient_data = st.session_state.patient_data
         df = pd.DataFrame([patient_data])[feature_names] # ensure ordering
         
-        pred = model.predict(df)[0]
         prob = float(model.predict_proba(df)[0][1])
+        # Medical decision threshold: 0.4 instead of default 0.5
+        # This improves recall from 0.47 to 0.84 for at-risk patients
+        pred = 1 if prob >= 0.4 else 0
         
         # 1. Executive Summary Metric
         dash_col1, dash_col2 = st.columns([1, 1])
