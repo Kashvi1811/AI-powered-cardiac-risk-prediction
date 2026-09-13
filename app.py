@@ -14,9 +14,13 @@ st.set_page_config(page_title="Cardiac Health AI", page_icon="🫀", layout="wid
 
 @st.cache_resource
 def load_model():
-    return joblib.load("logisticregression_pipeline.pkl")
+    artifact = joblib.load("logisticregression_pipeline.pkl")
+    # Support both old (plain pipeline) and new (dict with threshold) format
+    if isinstance(artifact, dict):
+        return artifact["pipeline"], artifact["threshold"]
+    return artifact, 0.4  # fallback to 0.4 if old format
 
-model = load_model()
+model, DECISION_THRESHOLD = load_model()
 gemini_api_key = st.secrets.get("GEMINI_API_KEY", "")
 
 st.markdown("""
@@ -268,9 +272,8 @@ with tab2:
         df = pd.DataFrame([patient_data])[feature_names] # ensure ordering
         
         prob = float(model.predict_proba(df)[0][1])
-        # Medical decision threshold: 0.4 instead of default 0.5
-        # This improves recall from 0.47 to 0.84 for at-risk patients
-        pred = 1 if prob >= 0.4 else 0
+        # Threshold tuned on training OOF data (F2-score), not on test set
+        pred = 1 if prob >= DECISION_THRESHOLD else 0
         
         # 1. Executive Summary Metric
         dash_col1, dash_col2 = st.columns([1, 1])
